@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>E-Commerce Shipping Prediction</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <style>
+      html, body {
+      min-height: 100%;
+      }
+      body, div, form, input, select, textarea, label { 
+      padding: 0;
+      margin: 0;
+      outline: none;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 14px;
+      color: #666;
+      line-height: 22px;
+      }
+      h1 {
+      position: absolute;
+      margin: 0;
+      font-size: 40px;
+      color: #fff;
+      z-index: 2;
+      line-height: 83px;
+      }
+      legend {
+      padding: 10px;      
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 18px;
+      color: #fff;
+      background-color: #FF8000;
+      }
+      textarea {
+      width: calc(100% - 12px);
+      padding: 5px;
+      }
+      .testbox {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: inherit;
+      padding: 20px;
+      }
+      form {
+      width: 100%;
+      padding: 20px;
+      border-radius: 6px;
+      background: #fff;
+      box-shadow: 0 0 8px #FF8000; 
+      }
+      .banner {
+      position: relative;
+      height: 250px;
+      background-image: url("https://www.wwaytv3.com/wp-content/uploads/2019/11/MGN_1280x960_90909P00-RXPYK.jpg");  
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      }
+      .banner::after {
+      content: "";
+      background-color: rgba(0, 0, 0, 0.4); 
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      }
+      input, select, textarea {
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      }
+      input {
+      width: calc(100% - 10px);
+      padding: 5px;
+      }
+      input[type="date"] {
+      padding: 4px 5px;
+      }
+      textarea {
+      width: calc(100% - 12px);
+      padding: 5px;
+      }
+      .item:hover p, .item:hover i, .question:hover p, .question label:hover, input:hover::placeholder {
+      color:  #F27900;
+      }
+      .item input:hover, .item select:hover, .item textarea:hover {
+      border: 1px solid transparent;
+      box-shadow: 0 0 3px 0  #F27900;
+      color: #F27900;
+      }
+      .item {
+      position: relative;
+      margin: 10px 0;
+      }
+      .item span {
+      color: #;
+      }
+      .item i {
+      right: 1%;
+      top: 30px;
+      z-index: 1;
+      }
+      .week {
+      display:flex;
+      justify-content:space-between;
+      }
+      .columns {
+      display:flex;
+      justify-content:space-between;
+      flex-direction:row;
+      flex-wrap:wrap;
+      }
+      .columns div {
+      width:48%;
+      }
+      input[type=radio], input[type=checkbox]  {
+      display: none;
+      }
+      label.radio {
+      position: relative;
+      display: inline-block;
+      margin: 5px 20px 15px 0;
+      cursor: pointer;
+      }
+      .question span {
+      margin-left: 30px;
+      }
+      .question-answer label {
+      display: block;
+      }
+      label.radio:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+      }
+      input[type=radio]:checked + label:before, label.radio:hover:before {
+      border: 2px solid  #CC6600;
+      }
+      label.radio:after {
+      content: "";
+      position: absolute;
+      top: 6px;
+      left: 5px;
+      width: 8px;
+      height: 4px;
+      border: 3px solid  #CC6600;
+      border-top: none;
+      border-right: none;
+      transform: rotate(-45deg);
+      opacity: 0;
+      }
+      input[type=radio]:checked + label:after {
+      opacity: 1;
+      }
+      .flax {
+      display:flex;
+      justify-content:space-around;
+      }
+      .btn-block {
+      margin-top: 10px;
+      text-align: center;
+      }
+      button {
+      width: 280px;
+      padding: 10px;
+      border: none;
+      border-radius: 5px; 
+      background:  #F27900;
+      font-size: 16px;
+      color: #fff;
+      cursor: pointer;
+      }
+      button:hover {
+      background:  #FF8000;
+      }
+      @media (min-width: 568px) {
+      .name-item, .city-item {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      }
+      .name-item input, .name-item div {
+      width: calc(50% - 20px);
+      }
+      .name-item div input {
+      width:97%;}
+      .name-item div label {
+      display:block;
+      padding-bottom:5px;
+      }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="testbox">
+    <form action="{{ url_for('predict')}}" method="post">
+      <div class="banner">
+        <h1>E-Commerce Shipping Prediction</h1>
+      </div>
+      <br/>
+      
+      <legend>Package's Detail</legend>
+      <div class="columns">
+      <div class="item" style=width:40%>
+      <p>Package's ID?</p>
+      <input name="ID" id="ID"  type="text" placeholder="ID" 
+        required="required"autocomplete="off">
+      </div> 
+      <div class="item">
+      <p>Warehouse Blocks</p>
+      <select name="Warehouse_block" id="Warehouse_block" required="required"  placeholder="Warehouse_block">
+                                <option  value="G" disabled selected>Block</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="F">F</option>
+          </select>
+      </div>
+      <div class="item">
+      <p>Mode of Shipment</p>
+      <select name="Mode_of_Shipment" id="Mode_of_Shipment" required="required"  placeholder="Mode_of_Shipment">
+                                <option  value="Car" disabled selected>Mode of Shipment</option>
+                                <option value="Flight">Flight</option>
+                                <option value="Ship">Ship</option>
+                                <option value="Road">Road</option>
+      </select>
+      </div>
+      <div class="item">
+      <p>Product Importance </p>
+      <select name="Product_Importance" id="Product_Importance" required="required"  placeholder="Product_Importance">
+                              <option value="" disabled selected>Importance</option>
+                              <option value="Low" >Low</option>
+                              <option value="Medium">Medium</option>
+                              <option value="High">High</option>
+      </select>
+      </div>
+      <div class="item">
+      <p>Gender of Purchaser </p>
+      <select name="Gender" id="Gender" required="required"  placeholder="Gender">
+                            <option  value="etc" disabled selected>Gender</option>
+                            <option value="Male" >Male</option>
+                            <option value="Female">Female</option>
+      </select>
+      </div>    
+      <div class="item">
+      <p>How many client is calling our customer center?</p>
+      <select name="Customer_Calls" id="Customer_Calls" required="required"  placeholder="Customer_Calls">
+                          <option value="8" disabled selected>Number of Calls</option>
+                          <option value=2>2</option>
+                          <option value=3>3</option>
+                          <option value=4>4</option>
+                          <option value=5>5</option>
+                          <option value=6>6</option>
+                          <option value=7>7</option>
+      </select>
+      </div>    
+      <div class="item">
+      <p>How much client's rating that's given to this order?</p>
+     <select name="Customer_Rating" id="Customer_Rating" required="required"  placeholder="Customer_Rating">
+                            <option  value="6" disabled selected>Customer Rating</option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                            <option value=4>4</option>
+                            <option value=5>5</option>
+      </select>
+      </div>   
+      <div class="item" >
+      <p>How many purchase priority rating for this package?</p>
+      <select name="Purchase_Priority" id="Purchase_Priority" required="required"  placeholder="Purchase_Priority">
+                            <option  value="1" disabled selected>Purchase's Priority</option>
+                            <option value=1>1</option>
+                            <option value=2>2</option>
+                            <option value=3>3</option>
+                            <option value=4>4</option>
+                            <option value=5>5</option>
+                            <option value=6>6</option>
+                            <option value=7>7</option>
+                            <option value=8>8</option>
+                            <option value=9>9</option>
+                            <option value=10>10</option>
+      </select>
+      </div>  
+      <div class="item" style=width:100%>
+      <p>How much are the cost of the product inside this package? (USD)</p>
+      <input name="Cost_product" id="Cost_product"  type="number "placeholder="Product's Cost" 
+        required="required"autocomplete="off">
+      </div>
+      <div class="item" style=width:100%>
+      <p>How much are the discount offered by the company to this product? (%)</p>
+      <input name="Discount_offered" id="Discount_offered"  type="number "placeholder="Discount offered" 
+        required="required"autocomplete="off">
+      </div>  
+      <div class="item" style=width:100%>
+      <p>How much are the weight of this package? (gram)</p>
+      <input name="Weight" id="Weight"  type="number "placeholder="Package's Weight" 
+        required="required"autocomplete="off">
+      </div>     
+      </div>
+      </fieldset>
+      <div class="btn-block">
+      <button type="submit" href="/">Predict Your Package Arrival Status</button>
+        <h3>{{ prediction_text }}</h3>
+      </div>
+    </form>
+    </div>
+  </body>
+</html>
